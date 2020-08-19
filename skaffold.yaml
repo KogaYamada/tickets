@@ -1,0 +1,22 @@
+# 監視役のファイル？
+
+apiVersion: skaffold/v2alpha3
+kind: Config
+deploy:
+  kubectl:
+    manifests:
+      - ./infra/k8s/*
+build:
+  local:
+    push: false #imageをビルドするときdockerにはpushしない
+  # googleCloudBuild:     # google cloud
+  #   projectId: ticketing-dev-283705  # google cloud
+  artifacts:
+    - image: koga0087/auth
+      context: auth
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts' #全てのTypeScriptファイルを同期する
+            dest: . #このファイルを内部に同期する場所
